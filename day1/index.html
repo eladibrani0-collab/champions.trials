@@ -1,0 +1,254 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#100e16">
+  <title>Moodify — Creative Universe</title>
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="style.css">
+
+  <script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script defer src="js/main.js"></script>
+</head>
+
+<div class="studio-note">
+ 
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="#home" data-open="home">
+      <span class="brand-mark">
+        <span aria-hidden="true">M</span>
+        <img src="photo.jpg" alt="" onerror="this.hidden=true">
+      </span>
+      MOODIFY<span class="brand-dot">.</span>
+    </a>
+
+    <nav aria-label="Main navigation">
+      <p class="nav-label">Workspace</p>
+      <button class="nav-link active" data-open="home">Overview</button>
+      <button class="nav-link" data-open="studio">Creative Studio</button>
+      <button class="nav-link" data-open="discover">Discover</button>
+
+      <p class="nav-label">Entertainment</p>
+      <button class="nav-link" data-open="arcade">Moodify Arcade</button>
+      <button class="nav-link" data-open="music">Playlist</button>
+
+      <p class="nav-label">Personal</p>
+      <button class="nav-link" data-open="collection">My Collection</button>
+      <button class="nav-link" data-open="profile">My Profile</button>
+    </nav>
+
+    <div class="sidebar-foot">
+      <button id="themeToggle" class="quiet">Light mode</button>
+      <small>MOODIFY © 2026</small>
+    </div>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <div>
+        <small class="eyebrow">Your creative universe</small>
+        <strong id="pageHeading">Overview</strong>
+      </div>
+
+      <div class="account-corner">
+        <button id="loginButton" class="quiet">Log in</button>
+        <button id="signupButton" class="primary">Sign up</button>
+        <button id="accountButton" class="quiet" data-open="profile" hidden></button>
+      </div>
+    </header>
+
+    <section class="page" id="home">
+      <div class="hero">
+        <div>
+          <small class="eyebrow">Creative Studio</small>
+          <h1>Imagine it.<br><em>Create it.</em></h1>
+          <p>A space where your ideas become visual experiences.</p>
+          <button class="primary" data-open="studio">Enter Creative Studio</button>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <h2 class="section-title">Creative overview</h2>
+      <div class="stats">
+        <article><small>Boards created</small><strong data-stat="boards">0</strong></article>
+        <article><small>Games played</small><strong data-stat="games">0</strong></article>
+        <article><small>Arcade score</small><strong data-stat="score">0</strong></article>
+        <article><small>Creative level</small><strong data-stat="level">01</strong></article>
+      </div>
+
+      <h2 class="section-title">Choose your experience</h2>
+      <div class="feature-grid">
+        <button class="feature" data-open="studio">
+          <strong>Creative Studio</strong><small>Build a mood board.</small>
+        </button>
+        <button class="feature" data-open="arcade">
+          <strong>Arcade</strong><small>Play a short puzzle.</small>
+        </button>
+        <button class="feature" data-open="discover">
+          <strong>Discover</strong><small>Explore six aesthetics and their sounds.</small>
+        </button>
+      </div>
+    </section>
+
+    <section class="page" id="studio" hidden>
+      <div class="intro">
+        <small class="eyebrow">The design lab</small>
+        <h1>Make your <em>vision.</em></h1>
+      </div>
+
+      <div class="studio-layout">
+        <div class="panel editor">
+          <h2>Design controls</h2>
+
+          <label for="boardTitle">Board title</label>
+          <input id="boardTitle" placeholder="My creative universe" maxlength="80">
+
+          <label for="themeSelect">Aesthetic</label>
+          <select id="themeSelect"></select>
+
+          <label for="accentInput">Accent color</label>
+          <input id="accentInput" type="color" value="#ad91e4">
+
+          <button class="primary" id="generateBoard">Generate board</button>
+          <button class="quiet" id="randomColor">Randomize color</button>
+          <button class="quiet" id="studioSound">Play aesthetic sound</button>
+
+          <label for="imageUpload">Add a photograph</label>
+          <input id="imageUpload" type="file" accept="image/*">
+
+          <button class="quiet" id="saveBoard">Save board</button>
+          <button class="quiet" id="exportBoard">Export as PNG</button>
+        </div>
+
+        <div class="panel canvas-panel">
+          <div id="moodBoard">
+            <small class="eyebrow">Moodify / Original series</small>
+            <div class="board-heading">
+              <h2 id="displayTitle"></h2>
+              <small id="boardDate"></small>
+            </div>
+            <div class="mood-grid" id="moodGrid"></div>
+            <small>MOODIFY CREATIVE STUDIO</small>
+          </div>
+          <p class="hint">Drag cards to rearrange your board.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="discover" hidden>
+      <div class="intro">
+        <small class="eyebrow">The inspiration library</small>
+        <h1>Discover your <em>aesthetic.</em></h1>
+        <p>Explore a visual collection or listen to its sound.</p>
+      </div>
+      <div class="discover-grid" id="discoverGrid"></div>
+    </section>
+
+    <section class="page" id="arcade" hidden>
+      <div class="intro">
+        <small class="eyebrow">Moodify entertainment system</small>
+        <h1>Enter the <em>Arcade.</em></h1>
+      </div>
+
+      <div class="stats arcade-stats">
+        <article><small>Your score</small><strong data-stat="score">0</strong></article>
+        <article><small>Games played</small><strong data-stat="games">0</strong></article>
+        <article><small>Your rank</small><strong data-stat="rank">Rookie</strong></article>
+      </div>
+
+      <div class="game-menu" aria-label="Choose a game">
+        <button data-game="paint">Color by Numbers</button>
+        <button data-game="slide">Sliding Puzzle</button>
+        <button data-game="water">Water Sort</button>
+        <button data-game="word">Daily Word</button>
+      </div>
+
+      <article class="panel arena">
+        <h2 id="gameTitle"></h2>
+        <p id="gameRules"></p>
+        <div id="gameSurface"></div>
+        <p class="game-status" id="gameStatus" aria-live="polite"></p>
+      </article>
+    </section>
+
+    <section class="page" id="music" hidden>
+      <div class="intro">
+        <small class="eyebrow">Moodify audio</small>
+        <h1>Studio <em>playlist.</em></h1>
+        <p>Four original instrumental sketches. Listen here or download a WAV file.</p>
+      </div>
+
+      <div class="panel">
+        <div id="trackList"></div>
+        <div class="player">
+          <small class="eyebrow">Now playing</small>
+          <strong id="nowPlaying">Choose a track</strong>
+          <audio id="audioPlayer" controls preload="none"></audio>
+        </div>
+      </div>
+    </section>
+
+    <section class="page" id="collection" hidden>
+      <div class="intro">
+        <small class="eyebrow">Your personal archive</small>
+        <h1>Made by <em>you.</em></h1>
+      </div>
+      <div class="collection-grid" id="collectionGrid"></div>
+    </section>
+
+    <section class="page" id="profile" hidden>
+      <div class="intro">
+        <small class="eyebrow">Your creative identity</small>
+        <h1>The <em>Creator.</em></h1>
+      </div>
+
+      <article class="panel profile-card">
+        <h2 id="profileName">Creative Explorer</h2>
+        <p id="profileDetail">Guest profile on this browser.</p>
+        <button class="quiet" id="profileLogin">Log in</button>
+        <button class="quiet" id="logoutButton" hidden>Log out</button>
+      </article>
+
+      <h2 class="section-title">Achievements</h2>
+      <div class="panel" id="achievements"></div>
+    </section>
+
+    <footer>
+      <strong>MOODIFY<span class="brand-dot">.</span></strong>
+      <small>© 2026 Moodify Creative Universe</small>
+    </footer>
+  </main>
+
+  <dialog id="authDialog">
+    <form id="authForm">
+      <div class="dialog-heading">
+        <h2 id="authTitle">Log in</h2>
+        <button type="button" class="quiet" id="closeAuth" aria-label="Close">Close</button>
+      </div>
+
+      <p class="hint">This profile and its collection are saved on this browser.</p>
+
+      <label id="nameLabel" for="authName">Display name</label>
+      <input id="authName" autocomplete="nickname" maxlength="40">
+
+      <label for="authEmail">Email</label>
+      <input id="authEmail" type="email" autocomplete="username" required>
+
+      <label for="authPassword">Password</label>
+      <input id="authPassword" type="password" autocomplete="current-password" required>
+
+      <p id="authError" class="form-error" role="alert"></p>
+      <button id="authSubmit" class="primary" type="submit">Log in</button>
+      <button id="switchAuth" class="text-button" type="button">Create an account</button>
+    </form>
+  </dialog>
+
+  <div id="toast" role="status"></div>
+</body>
+</html>
