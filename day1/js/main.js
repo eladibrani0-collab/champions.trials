@@ -27,6 +27,17 @@
     }
   }
 
+const difficulty = window.moodifyArcadeDifficulty;
+
+if (difficulty) {
+const startingLevel = difficulty.startLevel;
+const maximumLevel = difficulty.maxLevel;
+const challengeMultiplier = difficulty.multiplier;
+
+// Këto vlera përdoren nga loja
+// për të përcaktuar sfidat e nivelit.
+}
+
   function write(key, value) {
     try {
       localStorage.setItem(key, JSON.stringify(value));
@@ -275,88 +286,691 @@
         "0000111110000"
       ]
     }
+   
   };
+/* 1. Color by Numbers */
 
-  function renderPaint() {
-    const game = rounds.paint ||= { name: "Cat", progress: {} };
-    const picture = pictures[game.name];
-    const round = game.progress[game.name] ||= {
-      color: 1,
-      filled: new Set(),
-      done: false
-    };
+const paintingLevels = [
+{
+name: "Spring Flower",
+colors: ["#d996b6", "#eac267", "#729978"],
+rows: [
+"...11....",
+"..1111...",
+".112211..",
+".112211..",
+"..1111...",
+"....3....",
+"..333.33.",
+"...3333..",
+"....3...."
+]
+},
+{
+name: "Strawberry",
+colors: ["#c94e59", "#ed9190", "#f4cf84", "#61835c"],
+rows: [
+".....4.....",
+"...4.44.4..",
+"....4444...",
+"..1124211..",
+".122222221.",
+".123223221.",
+".122322321.",
+"..1223221..",
+"..1322211..",
+"...11231...",
+"....111...."
+]
+},
+{
+name: "Coral Fish",
+colors: ["#dd865b", "#f3c27e", "#ac594c", "#353e52"],
+rows: [
+".............",
+".....33......",
+"....3223.....",
+"...112211....",
+".312212211..3",
+"3122122141133",
+"3122122111233",
+".312212211..3",
+"...112211....",
+".....233.....",
+"......3......"
+]
+},
+{
+name: "Flowering Cactus",
+colors: ["#47755d", "#8bae7c", "#b66e51", "#e0a77b", "#d77a98"],
+rows: [
+".......55......",
+"......5555.....",
+"......121......",
+"......121......",
+"..12..121......",
+"..12..121..12..",
+"..12..121..12..",
+"..1222121..12..",
+"...1111212212..",
+"......121111...",
+"......121......",
+"...344444443...",
+"....3344433....",
+"....3344433....",
+".....33333....."
+]
+},
+{
+name: "Sailboat at Sunset",
+colors: ["#e6d4ac", "#cf795d", "#755548", "#6894ab", "#a8cbd0"],
+rows: [
+"........3........",
+".......13........",
+"......1132.......",
+".....111322......",
+"....11113222.....",
+"...1111132222....",
+"..111111322222...",
+".11111113222222..",
+"........3........",
+".333333333333333.",
+"..3222222222223..",
+"...33333333333...",
+"5544...555...4455",
+"..44555...5544...",
+"55...44555...4455"
+]
+},
+{
+name: "Woodland Fox",
+colors: ["#b96344", "#df9160", "#f0d6b4", "#513e3b", "#c98185"],
+rows: [
+".................",
+".44...........44.",
+".414.........414.",
+".4514.......4154.",
+".452144444441254.",
+"..4122222222214..",
+"..4122122212214..",
+".412221222122214.",
+".412442222244214.",
+"..1234222224321..",
+"..1333222223331..",
+"...13332223331...",
+"....133343331....",
+".....1334331.....",
+"......13331......",
+".......131.......",
+"........1........"
+]
+},
+{
+name: "Garden Butterfly",
+colors: ["#493c53", "#9c78b0", "#df9db4", "#edc980", "#7799af", "#a7c8bd"],
+rows: [
+".......1...1.......",
+".111....1.1....111.",
+".12211...1...11221.",
+".123321..1..123321.",
+".1234321.1.1234321.",
+"..123432111234321..",
+"..125532111235521..",
+"...1256211126521...",
+"....12221112221....",
+".....111111111.....",
+"....15521112551....",
+"...1566211126651...",
+"..154462111264451..",
+"..153321.1.123351..",
+"...1221..1..1221...",
+"....11.......11....",
+"..................."
+]
+},
+{
+    name: "Crystal Moth",
+    colors: ["#302b4a", "#7165a8", "#a58bd4", "#e3a6c8", "#f2c98e", "#9bc9d4"],
+    rows: [
+        ".........1.........",
+        "........121........",
+        ".......12321.......",
+        "......1234321......",
+        ".....123454321.....",
+        "....12345654321....",
+        "...123456654321....",
+        "..1234567654321....",
+        ".1234567654321.....",
+        "..123456654321.....",
+        "...12345654321.....",
+        "....1234565432.....",
+        ".....123454321.....",
+        "......1234321......",
+        ".......12321.......",
+        "........121........",
+        ".........1........."
+    ]
+},
+{
+name: "Lighthouse at Dusk",
+colors: ["#ad5758", "#eadbc6", "#4b5062", "#ecc779", "#7195a6", "#a6c0c4"],
+rows: [
+".........3.........",
+"........333........",
+".......31113.......",
+"......3333333......",
+"...44..34443..44...",
+".44....34443....44.",
+"......3333333......",
+"........222........",
+"........121........",
+".......11111.......",
+".......22222.......",
+".......22322.......",
+"......1111111......",
+"......1122211......",
+"......2223222......",
+".....222333222.....",
+"...3333333333333...",
+"5566655566655566655",
+"6555566655556665556"
+]
+},
+{
+    name: "Peacock Dream",
+    colors: ["#263b50", "#397b83", "#65a99b", "#b3c987", "#e8c77c", "#c18ac5"],
+    rows: [
+        ".........1.........",
+        "........121........",
+        ".......12321.......",
+        "......1234321......",
+        ".....123454321.....",
+        "....12345654321....",
+        "...1234567654321...",
+        "...1234567654321...",
+        "....123456654321...",
+        "....12345654321....",
+        "....12345654321....",
+        "....12345654321....",
+        "....12345654321....",
+        ".....123454321.....",
+        "......1234321......",
+        "........121........",
+        ".........1........."
+    ]
+},
+{
+    name: "Enchanted Flower",
+    colors: ["#453653", "#9271aa", "#d69bb8", "#f1c98c", "#91b8a7", "#c4d5dc"],
+    rows: [
+        "........1........",
+        ".......121.......",
+        "......12321......",
+        "...1..12321..1...",
+        "..121.12321.121..",
+        ".123211234321123.",
+        "..1234321234321..",
+        "...12343234321...",
+        "....123454321....",
+        "...12345654321...",
+        "..12345432154321..",
+        "...123432123432...",
+        "....1232112321....",
+        ".....121.121......",
+        "......1...1........",
+        "........1........"
+    ]
+},
+{
+    name: "Moonlight Dragonfly",
+    colors: ["#263b52", "#557c9c", "#78a9bd", "#b4d6d1", "#e9d49b", "#aa8dc2"],
+    rows: [
+        ".........1.........",
+        "........121........",
+        ".......12321.......",
+        "....111.123.111....",
+        "...12221.2.12221...",
+        "..123321.2.123321..",
+        ".1234321.2.1234321.",
+        "..123321.2.123321..",
+        "...1221..2..1221...",
+        ".........2.........",
+        ".........2.........",
+        "........121........",
+        ".......12221.......",
+        "......1234321......",
+        ".....123454321.....",
+        "........121........",
+        ".........1........."
+    ]
+},
+{
+    name: "Royal Peacock",
+    colors: ["#26374c", "#286b72", "#4c9b89", "#a4bc79", "#e5c47c", "#c58bb5"],
+    rows: [
+        ".........1.........",
+        "......1112111......",
+        ".....122123221.....",
+        "....12321212321....",
+        "...1234321234321...",
+        "..12345432123454321",
+        ".123456543123456543.",
+        "123456765432345676543",
+        ".123456543123456543.",
+        "..12345432123454321..",
+        "...1234321234321...",
+        "....12321212321....",
+        ".....122123221.....",
+        "......1112111......",
+        ".........1........."
+    ]
+},
+{
+    name: "Crystal Butterfly",
+    colors: ["#39304f", "#7762a5", "#a48bc8", "#d99fbd", "#f0cf91", "#83b9bb"],
+    rows: [
+        "........1........",
+        ".......121.......",
+        "......12321......",
+        "...11112321111...",
+        "..1222123212221..",
+        ".123321234123321.",
+        "1234321234321234321",
+        ".12345432123454321.",
+        "..12345654345654321",
+        "...1234567654321...",
+        "....12345654321....",
+        "...1234543212345...",
+        "..1234321.1234321..",
+        "...1221...1221...",
+        "....11.....11....",
+        "........1........"
+    ]
+},
+{
+    name: "Phoenix Wings",
+    colors: ["#432c46", "#a34f62", "#d97958", "#efb36f", "#f2d69b", "#8c829f"],
+    rows: [
+        ".........1.........",
+        "........121........",
+        ".......12321.......",
+        "......1234321......",
+        ".....123454321.....",
+        "...111234565432111...",
+        "..12212345676543221..",
+        ".1232123456765432123.",
+        "123432123456765432123",
+        ".12345432123454321.",
+        "..12345654345654321..",
+        "...1234567654321...",
+        "....12345654321....",
+        ".....123454321.....",
+        "......1234321......",
+        ".......1221.......",
+        "........11........"
+    ]
+},
+{
+    name: "Galaxy Serpent",
+    colors: ["#242943", "#514e83", "#7769b1", "#aa8bc9", "#d5a9c6", "#e9cb9b"],
+    rows: [
+        "...........111......",
+        ".........112221.....",
+        "........1233321.....",
+        ".......12344321.....",
+        "......123454321.....",
+        ".....12345654321....",
+        "....1234567654321...",
+        "...1234567654321....",
+        "..123456654321......",
+        "...12345654321......",
+        "....12345654321.....",
+        ".....123454321......",
+        "......1234321.......",
+        ".......12321........",
+        "........121.........",
+        ".........1..........",
+        "...................."
+    ]
+},
+{
+    name: "Celestial Phoenix",
+    colors: ["#342b4c", "#76517f", "#b66b86", "#e69b79", "#f1cb91", "#a2b9b5"],
+    rows: [
+        ".........1.........",
+        "........121........",
+        ".......12321.......",
+        "......1234321......",
+        ".....123454321.....",
+        "....12345654321....",
+        "...1234567654321...",
+        "..123456767654321..",
+        ".12345676567654321.",
+        "123456765432345676543",
+        "..1234567654321..",
+        "...12345654321...",
+        "....123454321....",
+        ".....1234321.....",
+        "......12321......",
+        ".......121.......",
+        "........1........"
+    ]
+},
+{
+    name: "Mystic Castle",
+    colors: ["#30304c", "#625b91", "#8f82b5", "#c3a5c7", "#e8c993", "#8eb5ae"],
+    rows: [
+        "........1........",
+        ".......121.......",
+        "......12321......",
+        ".....1234321.....",
+        "....123454321....",
+        "...12345654321...",
+        "..1234567654321..",
+        ".123456767654321.",
+        "12345676567654321",
+        "..1234567654321..",
+        "..123456767654321",
+        "..1234567654321..",
+        "...12345654321...",
+        "....123454321....",
+        "...12345654321...",
+        "..1234567654321..",
+        ".123456767654321.",
+        "12345676567654321",
+        "........1........"
+    ]
+},
+{
+    name: "Infinite Mandala",
+    colors: ["#332a49", "#70528e", "#a276ae", "#d69bb7", "#edc77e", "#81b5aa"],
+    rows: [
+        ".........1.........",
+        "........121........",
+        ".......12321.......",
+        "......1234321......",
+        ".....123454321.....",
+        "....12345654321....",
+        "...1234567654321...",
+        "..123456767654321..",
+        ".12345676567654321.",
+        "123456765432345676543",
+        ".12345676567654321.",
+        "..123456767654321..",
+        "...1234567654321...",
+        "....12345654321....",
+        ".....123454321.....",
+        "......1234321......",
+        ".......12321.......",
+        "........121........",
+        ".........1........."
+    ]
+},
+{
+    name: "Cosmic Universe",
+    colors: ["#211f3d", "#514b83", "#8068ad", "#b58bc6", "#e2a5bd", "#f1cd91"],
+    rows: [
+        ".........1.........",
+        "........121........",
+        ".......12321.......",
+        "......1234321......",
+        ".....123454321.....",
+        "....12345654321....",
+        "...1234567654321...",
+        "..123456767654321..",
+        ".12345676567654321.",
+        "123456765432345676543",
+        ".12345676567654321.",
+        "..123456767654321..",
+        "...1234567654321...",
+        "....12345654321....",
+        "...123456767654321...",
+        "..12345676567654321..",
+        ".123456765432345676543.",
+        "123456767654321234567654321",
+        ".123456765432345676543.",
+        "..123456767654321..",
+        "...1234567654321...",
+        "....12345654321....",
+        ".....123454321.....",
+        "......1234321......",
+        ".......12321.......",
+        "........121........",
+        ".........1........."
+    ]
+},
+];
 
-    const picker = element("div", "picture-picker board-tools", $("gameSurface"));
 
-    Object.keys(pictures).forEach(name => {
-      const choice = button(picker, name, () => {
-        game.name = name;
-        renderGame();
-      });
-      choice.setAttribute("aria-pressed", String(game.name === name));
-    });
 
-    const palette = gameTools();
+function paintingTextColor(hexColor) {
+const [r, g, b] = hexColor.slice(1).match(/../g)
+.map(value => parseInt(value, 16));
 
-    picture.colors.forEach((hex, index) => {
-      const color = index + 1;
+return r * 0.299 + g * 0.587 + b * 0.114 > 145
+? "#241e25"
+: "#ffffff";
+}
 
-      const swatch = button(palette, color, () => {
-        round.color = color;
-        renderGame();
-      }, "swatch");
+function renderPaint() {
+const surface = $("gameSurface");
+const lastLevel = paintingLevels.length - 1;
 
-      swatch.style.backgroundColor = hex;
-      swatch.style.color = [2, 4].includes(color) ? "#fff" : "#241e25";
-      swatch.setAttribute("aria-label", `Color ${color}`);
-      swatch.setAttribute("aria-pressed", String(round.color === color));
-    });
+// Keep progress from the previous version of the coloring game.
+let progress = data.paintingProgress;
 
-    const grid = element("div", "paint-grid", $("gameSurface"));
-    grid.style.setProperty("--columns", picture.rows[0].length);
-    grid.style.display = "grid";
-    grid.style.gridTemplateColumns = `repeat(${picture.rows[0].length}, minmax(0, 1fr))`;
+if (!progress || !progress.byLevel) {
+const oldLevel = Number.isInteger(progress?.level)
+? Math.max(0, Math.min(progress.level, lastLevel))
+: 0;
 
-    const cells = [...picture.rows.join("")].map(Number);
-    const total = cells.filter(Boolean).length;
+const oldFilled = Array.isArray(progress?.filled) ? progress.filled : [];
 
-    cells.forEach((color, index) => {
-      if (!color) {
-        element("span", "pixel paper", grid);
-        return;
-      }
+progress = {
+level: oldLevel,
+byLevel: {},
+rewarded: []
+};
 
-      const filled = round.filled.has(index);
+// Earlier levels had to be completed to reach the current one.
+for (let level = 0; level < oldLevel; level++) {
+progress.rewarded.push(level);
+}
 
-      const square = button(grid, filled ? "" : color, () => {
-        if (round.color !== color) {
-          gameMessage(`Choose color ${color} for this square.`);
-          return;
-        }
+const oldCells = [...paintingLevels[oldLevel].rows.join("")];
+const validFilled = [...new Set(oldFilled)].filter(index =>
+Number.isInteger(index) &&
+index >= 0 &&
+index < oldCells.length &&
+oldCells[index] !== "."
+);
 
-        round.filled.add(index);
-        square.textContent = "";
-        square.disabled = true;
-        square.style.backgroundColor = picture.colors[color - 1];
+progress.byLevel[oldLevel] = validFilled;
 
-        if (round.filled.size === total) {
-          award(round, 40);
-          gameMessage(`${game.name} complete. You earned 40 points.`);
-        } else {
-          gameMessage(`${round.filled.size} of ${total} squares colored.`);
-        }
-      }, "pixel");
+if (validFilled.length === oldCells.filter(value => value !== ".").length) {
+progress.rewarded.push(oldLevel);
+}
 
-      square.disabled = filled;
-      square.setAttribute("aria-label", `Square ${index + 1}, color ${color}`);
-      if (filled) square.style.backgroundColor = picture.colors[color - 1];
-    });
+data.paintingProgress = progress;
+persist();
+}
 
-    gameMessage(round.done
-      ? `${game.name} complete. You earned 40 points.`
-      : `${round.filled.size} of ${total} squares colored.`);
-  }
+const level = progress.level;
+const picture = paintingLevels[level];
+const columns = picture.rows[0].length;
+const cells = [...picture.rows.join("")];
+const total = cells.filter(value => value !== ".").length;
+const points = 40 + level * 10;
 
+// Older versions saved only the active picture. Restore previously
+// completed pictures when the player visits them for the first time.
+if (!Object.hasOwn(progress.byLevel, level)) {
+progress.byLevel[level] = progress.rewarded.includes(level)
+? cells.flatMap((value, index) => value === "." ? [] : [index])
+: [];
+}
+
+const filled = new Set(progress.byLevel[level]);
+const complete = filled.size === total;
+
+if (rounds.paint?.level !== level) {
+rounds.paint = { level, color: 1 };
+}
+
+const round = rounds.paint;
+
+function showCount() {
+gameMessage(
+`Level ${level + 1} of ${paintingLevels.length} · ` +
+`${filled.size} of ${total} squares colored`
+);
+}
+
+function goToLevel(nextLevel) {
+progress.level = nextLevel;
+delete rounds.paint;
+persist();
+renderGame();
+}
+
+$("gameRules").textContent = complete
+? `You revealed ${picture.name}.`
+: `Level ${level + 1} · Choose a color and fill its matching numbers.`;
+
+const palette = gameTools();
+
+picture.colors.forEach((color, index) => {
+const number = index + 1;
+
+const swatch = button(palette, number, () => {
+round.color = number;
+
+for (const item of palette.children) {
+item.setAttribute(
+"aria-pressed",
+String(Number(item.dataset.color) === number)
+);
+}
+
+showCount();
+}, "swatch");
+
+swatch.dataset.color = String(number);
+swatch.style.backgroundColor = color;
+swatch.style.color = paintingTextColor(color);
+swatch.setAttribute("aria-label", `Color ${number}`);
+swatch.setAttribute("aria-pressed", String(round.color === number));
+swatch.disabled = complete;
+});
+
+const grid = element("div", "paint-grid", surface);
+grid.style.setProperty("--columns", columns);
+grid.style.gridTemplateColumns = `repeat(${columns}, minmax(0, 1fr))`;
+grid.style.width = "100%";
+grid.style.maxWidth = `${Math.min(490, columns * 29)}px`;
+
+cells.forEach((value, index) => {
+if (value === ".") {
+const paper = element("span", "pixel paper", grid);
+paper.setAttribute("aria-hidden", "true");
+return;
+}
+
+const number = Number(value);
+const alreadyFilled = filled.has(index);
+
+const square = button(grid, alreadyFilled ? "" : number, () => {
+if (filled.has(index)) return;
+
+if (round.color !== number) {
+gameMessage(`Choose color ${number} for this square.`);
+return;
+}
+
+filled.add(index);
+progress.byLevel[level] = [...filled];
+
+square.textContent = "";
+square.disabled = true;
+square.style.backgroundColor = picture.colors[number - 1];
+restart.disabled = false;
+
+if (filled.size < total) {
+persist();
+showCount();
+return;
+}
+
+const firstWin = !progress.rewarded.includes(level);
+
+if (firstWin) {
+progress.rewarded.push(level);
+// Save the reward and the completed picture together.
+award({ done: false }, points);
+} else {
+persist();
+}
+
+renderGame();
+
+if (firstWin) {
+gameMessage(`${picture.name} complete. You earned ${points} points.`);
+}
+}, "pixel");
+
+square.disabled = alreadyFilled;
+square.setAttribute(
+"aria-label",
+`Row ${Math.floor(index / columns) + 1}, column ${index % columns + 1}, color ${number}`
+);
+
+if (alreadyFilled) {
+square.style.backgroundColor = picture.colors[number - 1];
+}
+});
+
+// Navigation stays directly below the picture.
+const controls = gameTools();
+
+const back = button(controls, "Go back one level", () => {
+if (level > 0) goToLevel(level - 1);
+});
+
+back.disabled = level === 0;
+back.title = level === 0
+? "You are on the first level"
+: `Return to level ${level}`;
+
+const restart = button(controls, "Start over", () => {
+const confirmed = window.confirm(
+`Start "${picture.name}" again? This clears the colors on this picture only.`
+);
+
+if (!confirmed) return;
+
+progress.byLevel[level] = [];
+goToLevel(level);
+});
+
+restart.disabled = filled.size === 0;
+
+// A previously completed level stays unlocked during a replay.
+if (level < lastLevel && progress.rewarded.includes(level)) {
+button(controls, `Continue to level ${level + 2}`, () => {
+goToLevel(level + 1);
+}, "primary");
+}
+
+if (complete) {
+gameMessage(
+level === lastLevel
+? `${picture.name} complete. You finished all ${paintingLevels.length} levels!`
+: `${picture.name} complete.`
+);
+} else {
+showCount();
+}
+}
   /* 2. Sliding Puzzle */
 
   function neighbors(gap) {
@@ -2176,6 +2790,44 @@
   } else {
     start();
   }
+const themeSelect = document.getElementById("themeSelect");
+
+if (themeSelect) {
+const themeMap = {
+luxury: "oldmoney",
+minimal: "cottage",
+summer: "cottage",
+dark: "dark",
+pastel: "coquette",
+cyber: "y2k"
+};
+
+function syncAesthetic() {
+const selectedTheme = themeSelect.value;
+const aestheticKey = themeMap[selectedTheme];
+
+if (!aestheticKey) return;
+
+const aestheticButton = document.querySelector(
+'#mfAesthetic .mfChoice[data-key="' +
+aestheticKey +
+'"]'
+);
+
+if (aestheticButton) {
+aestheticButton.click();
+}
+}
+
+themeSelect.addEventListener(
+"change",
+syncAesthetic
+);
+
+syncAesthetic();
+}
+
+
 })();
   /* 1. Color by Numbers */
 
@@ -2502,3 +3154,395 @@
       gameMessage(`${round.filled.size} of ${round.total} squares colored.`);
     }
   }
+
+function renderPaint() {
+const surface = $("gameSurface");
+const lastLevel = paintingLevels.length - 1;
+
+// Keep progress from the previous version of the coloring game.
+let progress = data.paintingProgress;
+
+if (!progress || !progress.byLevel) {
+const oldLevel = Number.isInteger(progress?.level)
+? Math.max(0, Math.min(progress.level, lastLevel))
+: 0;
+
+const oldFilled = Array.isArray(progress?.filled) ? progress.filled : [];
+
+progress = {
+level: oldLevel,
+byLevel: {},
+rewarded: []
+};
+
+// Earlier levels had to be completed to reach the current one.
+for (let level = 0; level < oldLevel; level++) {
+progress.rewarded.push(level);
+}
+
+const oldCells = [...paintingLevels[oldLevel].rows.join("")];
+const validFilled = [...new Set(oldFilled)].filter(index =>
+Number.isInteger(index) &&
+index >= 0 &&
+index < oldCells.length &&
+oldCells[index] !== "."
+);
+
+progress.byLevel[oldLevel] = validFilled;
+
+if (validFilled.length === oldCells.filter(value => value !== ".").length) {
+progress.rewarded.push(oldLevel);
+}
+
+data.paintingProgress = progress;
+persist();
+}
+
+const level = progress.level;
+const picture = paintingLevels[level];
+const columns = picture.rows[0].length;
+const cells = [...picture.rows.join("")];
+const total = cells.filter(value => value !== ".").length;
+const points = 40 + level * 10;
+
+// Older versions saved only the active picture. Restore previously
+// completed pictures when the player visits them for the first time.
+if (!Object.hasOwn(progress.byLevel, level)) {
+progress.byLevel[level] = progress.rewarded.includes(level)
+? cells.flatMap((value, index) => value === "." ? [] : [index])
+: [];
+}
+
+const filled = new Set(progress.byLevel[level]);
+const complete = filled.size === total;
+
+if (rounds.paint?.level !== level) {
+rounds.paint = { level, color: 1 };
+}
+
+const round = rounds.paint;
+
+function showCount() {
+gameMessage(
+`Level ${level + 1} of ${paintingLevels.length} · ` +
+`${filled.size} of ${total} squares colored`
+);
+}
+
+function goToLevel(nextLevel) {
+progress.level = nextLevel;
+delete rounds.paint;
+persist();
+renderGame();
+}
+
+$("gameRules").textContent = complete
+? `You revealed ${picture.name}.`
+: `Level ${level + 1} · Choose a color and fill its matching numbers.`;
+
+const palette = gameTools();
+
+picture.colors.forEach((color, index) => {
+const number = index + 1;
+
+const swatch = button(palette, number, () => {
+round.color = number;
+
+for (const item of palette.children) {
+item.setAttribute(
+"aria-pressed",
+String(Number(item.dataset.color) === number)
+);
+}
+
+showCount();
+}, "swatch");
+
+swatch.dataset.color = String(number);
+swatch.style.backgroundColor = color;
+swatch.style.color = paintingTextColor(color);
+swatch.setAttribute("aria-label", `Color ${number}`);
+swatch.setAttribute("aria-pressed", String(round.color === number));
+swatch.disabled = complete;
+});
+
+const grid = element("div", "paint-grid", surface);
+grid.style.setProperty("--columns", columns);
+grid.style.gridTemplateColumns = `repeat(${columns}, minmax(0, 1fr))`;
+grid.style.width = "100%";
+grid.style.maxWidth = `${Math.min(490, columns * 29)}px`;
+
+cells.forEach((value, index) => {
+if (value === ".") {
+const paper = element("span", "pixel paper", grid);
+paper.setAttribute("aria-hidden", "true");
+return;
+}
+
+const number = Number(value);
+const alreadyFilled = filled.has(index);
+
+const square = button(grid, alreadyFilled ? "" : number, () => {
+if (filled.has(index)) return;
+
+if (round.color !== number) {
+gameMessage(`Choose color ${number} for this square.`);
+return;
+}
+
+filled.add(index);
+progress.byLevel[level] = [...filled];
+
+square.textContent = "";
+square.disabled = true;
+square.style.backgroundColor = picture.colors[number - 1];
+restart.disabled = false;
+
+if (filled.size < total) {
+persist();
+showCount();
+return;
+}
+
+const firstWin = !progress.rewarded.includes(level);
+
+if (firstWin) {
+progress.rewarded.push(level);
+// Save the reward and the completed picture together.
+award({ done: false }, points);
+} else {
+persist();
+}
+
+renderGame();
+
+if (firstWin) {
+gameMessage(`${picture.name} complete. You earned ${points} points.`);
+}
+}, "pixel");
+
+square.disabled = alreadyFilled;
+square.setAttribute(
+"aria-label",
+`Row ${Math.floor(index / columns) + 1}, column ${index % columns + 1}, color ${number}`
+);
+
+if (alreadyFilled) {
+square.style.backgroundColor = picture.colors[number - 1];
+}
+});
+
+// Navigation stays directly below the picture.
+const controls = gameTools();
+
+const back = button(controls, "Go back one level", () => {
+if (level > 0) goToLevel(level - 1);
+});
+
+back.disabled = level === 0;
+back.title = level === 0
+? "You are on the first level"
+: `Return to level ${level}`;
+
+const restart = button(controls, "Start over", () => {
+const confirmed = window.confirm(
+`Start "${picture.name}" again? This clears the colors on this picture only.`
+);
+
+if (!confirmed) return;
+
+progress.byLevel[level] = [];
+goToLevel(level);
+});
+
+restart.disabled = filled.size === 0;
+
+// A previously completed level stays unlocked during a replay.
+if (level < lastLevel && progress.rewarded.includes(level)) {
+button(controls, `Continue to level ${level + 2}`, () => {
+goToLevel(level + 1);
+}, "primary");
+}
+
+if (complete) {
+gameMessage(
+level === lastLevel
+? `${picture.name} complete. You finished all ${paintingLevels.length} levels!`
+: `${picture.name} complete.`
+);
+} else {
+showCount();
+}
+}  
+
+/* =========================================================
+VISIT DURATION
+========================================================= */
+
+const visitKey = "moodifyVisitDurationV2";
+let visitMinutes = 15;
+
+function validMinutes(minutes) {
+return Number.isInteger(minutes)
+&& minutes >= 1
+&& minutes <= 180;
+}
+
+function configureVisit(minutes) {
+visitMinutes = minutes;
+
+document.querySelectorAll(
+'[data-game="pairs"], [data-game="order"]'
+).forEach(item => item.remove());
+
+const menu = document.querySelector(".game-menu");
+if (!menu) return;
+
+const extraGames = [
+["pairs", 30],
+["order", 60]
+];
+
+extraGames.forEach(([key, minimum]) => {
+if (minutes < minimum) return;
+
+const choice = document.createElement("button");
+choice.type = "button";
+choice.dataset.game = key;
+choice.textContent = gameInfo[key][0];
+
+choice.addEventListener("click", () => {
+openGame(key);
+});
+
+menu.appendChild(choice);
+});
+
+rounds = {};
+renderGame();
+}
+
+function chooseVisit() {
+let saved = null;
+
+try {
+saved = JSON.parse(
+sessionStorage.getItem(visitKey)
+);
+} catch {}
+
+if (
+saved &&
+validMinutes(saved.minutes) &&
+saved.until > Date.now()
+) {
+configureVisit(saved.minutes);
+return;
+}
+
+const dialog = document.createElement("dialog");
+dialog.className = "mf-dialog";
+
+dialog.innerHTML = `
+<form class="mf-form">
+<h2>Welcome to Moodify!</h2>
+
+<p>
+How much time would you like
+to spend with us today?
+</p>
+
+<p>
+Choose any duration up to 3 hours.
+Your Arcade experience will adapt
+to your available time.
+</p>
+
+<div class="mf-time-fields">
+<label>
+Hours
+<input
+id="selectedHours"
+type="number"
+min="0"
+max="3"
+value="0"
+required
+>
+</label>
+
+<label>
+Minutes
+<input
+id="selectedMinutes"
+type="number"
+min="0"
+max="59"
+value="15"
+required
+>
+</label>
+</div>
+
+<p id="timeError" role="alert"></p>
+
+<button class="mf-primary" type="submit">
+Enter Moodify
+</button>
+</form>
+`;
+
+document.body.appendChild(dialog);
+
+dialog.addEventListener("cancel", event => {
+event.preventDefault();
+});
+
+const form = dialog.querySelector("form");
+
+form.addEventListener("submit", event => {
+event.preventDefault();
+
+const hours = Number(
+dialog.querySelector("#selectedHours").value
+);
+
+const minutes = Number(
+dialog.querySelector("#selectedMinutes").value
+);
+
+const total = hours * 60 + minutes;
+
+if (
+!Number.isInteger(hours) ||
+!Number.isInteger(minutes) ||
+hours < 0 ||
+hours > 3 ||
+minutes < 0 ||
+minutes > 59 ||
+!validMinutes(total)
+) {
+dialog.querySelector("#timeError").textContent =
+"Please choose between 1 minute and 3 hours.";
+return;
+}
+
+configureVisit(total);
+
+try {
+sessionStorage.setItem(
+visitKey,
+JSON.stringify({
+minutes: total,
+until: Date.now() + total * 60000
+
+})
+);
+} catch {}
+
+dialog.close();
+dialog.remove();
+});
+
+dialog.showModal();
+}

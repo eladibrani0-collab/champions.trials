@@ -1,254 +1,1886 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#100e16">
-  <title>Moodify — Creative Universe</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#100e16">
+<title>Moodify — Creative Universe</title>
 
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap">
-  <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="style.css">
 
-  <script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  <script defer src="js/main.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script defer src="js/main.js"></script>
 </head>
 
-<div class="studio-note">
- 
 <body>
-  <aside class="sidebar">
-    <a class="brand" href="#home" data-open="home">
-      <span class="brand-mark">
-        <span aria-hidden="true">M</span>
-        <img src="photo.jpg" alt="" onerror="this.hidden=true">
-      </span>
-      MOODIFY<span class="brand-dot">.</span>
-    </a>
 
-    <nav aria-label="Main navigation">
-      <p class="nav-label">Workspace</p>
-      <button class="nav-link active" data-open="home">Overview</button>
-      <button class="nav-link" data-open="studio">Creative Studio</button>
-      <button class="nav-link" data-open="discover">Discover</button>
+<dialog id="visitDialog" class="mf-dialog" aria-labelledby="visitTitle">
+<form id="visitForm" class="mf-form">
+<h2 id="visitTitle">How much time do you have?</h2>
+<p>Choose up to 3 hours. We’ll adapt your Arcade to your visit.</p>
 
-      <p class="nav-label">Entertainment</p>
-      <button class="nav-link" data-open="arcade">Moodify Arcade</button>
-      <button class="nav-link" data-open="music">Playlist</button>
+<div class="mf-time-fields">
+<label>
+Hours
+<input id="visitHours" type="number" min="0" max="3" step="1" value="0" inputmode="numeric">
+</label>
 
-      <p class="nav-label">Personal</p>
-      <button class="nav-link" data-open="collection">My Collection</button>
-      <button class="nav-link" data-open="profile">My Profile</button>
-    </nav>
+<label>
+Minutes
+<input id="visitMinutes" type="number" min="0" max="59" step="1" value="15" inputmode="numeric">
+</label>
+</div>
 
-    <div class="sidebar-foot">
-      <button id="themeToggle" class="quiet">Light mode</button>
-      <small>MOODIFY © 2026</small>
-    </div>
-  </aside>
+<p id="visitError" role="alert"></p>
+<button class="mf-primary" type="submit">Enter Moodify</button>
+</form>
+</dialog>
 
-  <main>
-    <header class="topbar">
-      <div>
-        <small class="eyebrow">Your creative universe</small>
-        <strong id="pageHeading">Overview</strong>
-      </div>
+<dialog id="photoDialog" class="mf-dialog" aria-labelledby="photoTitle">
+<form id="photoForm" class="mf-form">
+<h2 id="photoTitle">Frame your photo</h2>
 
-      <div class="account-corner">
-        <button id="loginButton" class="quiet">Log in</button>
-        <button id="signupButton" class="primary">Sign up</button>
-        <button id="accountButton" class="quiet" data-open="profile" hidden></button>
-      </div>
-    </header>
+<label>
+Format
+<select id="photoFormat">
+<option value="square">Square · 1:1</option>
+<option value="rectangle">Rectangle · 4:3</option>
+</select>
+</label>
 
-    <section class="page" id="home">
-      <div class="hero">
-        <div>
-          <small class="eyebrow">Creative Studio</small>
-          <h1>Imagine it.<br><em>Create it.</em></h1>
-          <p>A space where your ideas become visual experiences.</p>
-          <button class="primary" data-open="studio">Enter Creative Studio</button>
-        </div>
-        <div class="hero-art" aria-hidden="true">
-          <span></span><span></span><span></span>
-        </div>
-      </div>
+<canvas id="photoPreview" width="800" height="800"
+aria-label="Preview of your framed photo"></canvas>
 
-      <h2 class="section-title">Creative overview</h2>
-      <div class="stats">
-        <article><small>Boards created</small><strong data-stat="boards">0</strong></article>
-        <article><small>Games played</small><strong data-stat="games">0</strong></article>
-        <article><small>Arcade score</small><strong data-stat="score">0</strong></article>
-        <article><small>Creative level</small><strong data-stat="level">01</strong></article>
-      </div>
+<label>
+Horizontal position
+<input id="photoX" type="range" min="0" max="100" value="50">
+</label>
 
-      <h2 class="section-title">Choose your experience</h2>
-      <div class="feature-grid">
-        <button class="feature" data-open="studio">
-          <strong>Creative Studio</strong><small>Build a mood board.</small>
-        </button>
-        <button class="feature" data-open="arcade">
-          <strong>Arcade</strong><small>Play a short puzzle.</small>
-        </button>
-        <button class="feature" data-open="discover">
-          <strong>Discover</strong><small>Explore six aesthetics and their sounds.</small>
-        </button>
-      </div>
-    </section>
+<label>
+Vertical position
+<input id="photoY" type="range" min="0" max="100" value="50">
+</label>
 
-    <section class="page" id="studio" hidden>
-      <div class="intro">
-        <small class="eyebrow">The design lab</small>
-        <h1>Make your <em>vision.</em></h1>
-      </div>
+<div class="mf-actions">
+<button id="cancelPhoto" type="button">Cancel</button>
+<button class="mf-primary" type="submit">Add photo</button>
+</div>
+</form>
+</dialog>
 
-      <div class="studio-layout">
-        <div class="panel editor">
-          <h2>Design controls</h2>
+<!-- MOODIFY WELCOME TIMER -->
 
-          <label for="boardTitle">Board title</label>
-          <input id="boardTitle" placeholder="My creative universe" maxlength="80">
+<style>
+#moodifyWelcome {
+position: fixed;
+inset: 0;
+z-index: 999999;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 20px;
+background: rgba(12, 9, 20, 0.88);
+backdrop-filter: blur(14px);
+font-family: inherit;
+}
 
-          <label for="themeSelect">Aesthetic</label>
-          <select id="themeSelect"></select>
+#moodifyWelcome[hidden] {
+display: none !important;
+}
 
-          <label for="accentInput">Accent color</label>
-          <input id="accentInput" type="color" value="#ad91e4">
+.moodifyWelcomeBox {
+width: 100%;
+max-width: 440px;
+padding: 35px;
+border: 1px solid #bca0ed55;
+border-radius: 22px;
+background: #21182e;
+color: #fff;
+text-align: center;
+box-shadow: 0 20px 80px #0007;
+}
 
-          <button class="primary" id="generateBoard">Generate board</button>
-          <button class="quiet" id="randomColor">Randomize color</button>
-          <button class="quiet" id="studioSound">Play aesthetic sound</button>
+.moodifyWelcomeBox h2 {
+margin: 0 0 15px;
+font-size: 30px;
+color: #fff;
+}
 
-          <label for="imageUpload">Add a photograph</label>
-          <input id="imageUpload" type="file" accept="image/*">
+.moodifyWelcomeBox p {
+color: #d9cce8;
+line-height: 1.6;
+}
 
-          <button class="quiet" id="saveBoard">Save board</button>
-          <button class="quiet" id="exportBoard">Export as PNG</button>
-        </div>
+.moodifyTimeInputs {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 14px;
+margin: 25px 0;
+}
 
-        <div class="panel canvas-panel">
-          <div id="moodBoard">
-            <small class="eyebrow">Moodify / Original series</small>
-            <div class="board-heading">
-              <h2 id="displayTitle"></h2>
-              <small id="boardDate"></small>
-            </div>
-            <div class="mood-grid" id="moodGrid"></div>
-            <small>MOODIFY CREATIVE STUDIO</small>
-          </div>
-          <p class="hint">Drag cards to rearrange your board.</p>
-        </div>
-      </div>
-    </section>
+.moodifyTimeInputs label {
+display: block;
+color: #e9def5;
+text-align: left;
+font-size: 14px;
+}
 
-    <section class="page" id="discover" hidden>
-      <div class="intro">
-        <small class="eyebrow">The inspiration library</small>
-        <h1>Discover your <em>aesthetic.</em></h1>
-        <p>Explore a visual collection or listen to its sound.</p>
-      </div>
-      <div class="discover-grid" id="discoverGrid"></div>
-    </section>
+.moodifyTimeInputs input {
+display: block;
+width: 100%;
+margin-top: 8px;
+padding: 13px;
+border: 1px solid #806b9e;
+border-radius: 10px;
+background: #382b49;
+color: white;
+font-size: 18px;
+}
 
-    <section class="page" id="arcade" hidden>
-      <div class="intro">
-        <small class="eyebrow">Moodify entertainment system</small>
-        <h1>Enter the <em>Arcade.</em></h1>
-      </div>
+#moodifyEnter {
+width: 100%;
+padding: 15px;
+border: none;
+border-radius: 12px;
+background: linear-gradient(120deg, #c7a7ff, #e9a8d4);
+color: #24152f;
+font-size: 16px;
+font-weight: bold;
+cursor: pointer;
+}
 
-      <div class="stats arcade-stats">
-        <article><small>Your score</small><strong data-stat="score">0</strong></article>
-        <article><small>Games played</small><strong data-stat="games">0</strong></article>
-        <article><small>Your rank</small><strong data-stat="rank">Rookie</strong></article>
-      </div>
+#moodifyTimeError {
+min-height: 20px;
+color: #ffb5b5;
+}
 
-      <div class="game-menu" aria-label="Choose a game">
-        <button data-game="paint">Color by Numbers</button>
-        <button data-game="slide">Sliding Puzzle</button>
-        <button data-game="water">Water Sort</button>
-        <button data-game="word">Daily Word</button>
-      </div>
+@media (max-width: 480px) {
+.moodifyWelcomeBox {
+padding: 24px;
+}
 
-      <article class="panel arena">
-        <h2 id="gameTitle"></h2>
-        <p id="gameRules"></p>
-        <div id="gameSurface"></div>
-        <p class="game-status" id="gameStatus" aria-live="polite"></p>
-      </article>
-    </section>
+.moodifyWelcomeBox h2 {
+font-size: 25px;
+}
+}
+</style>
 
-    <section class="page" id="music" hidden>
-      <div class="intro">
-        <small class="eyebrow">Moodify audio</small>
-        <h1>Studio <em>playlist.</em></h1>
-        <p>Four original instrumental sketches. Listen here or download a WAV file.</p>
-      </div>
+<div id="moodifyWelcome" hidden>
+<div class="moodifyWelcomeBox">
+<h2>Welcome to Moodify</h2>
 
-      <div class="panel">
-        <div id="trackList"></div>
-        <div class="player">
-          <small class="eyebrow">Now playing</small>
-          <strong id="nowPlaying">Choose a track</strong>
-          <audio id="audioPlayer" controls preload="none"></audio>
-        </div>
-      </div>
-    </section>
+<p>How much time would you like to spend with us today?</p>
+<p>Choose any duration, from 1 minute to 3 hours.</p>
 
-    <section class="page" id="collection" hidden>
-      <div class="intro">
-        <small class="eyebrow">Your personal archive</small>
-        <h1>Made by <em>you.</em></h1>
-      </div>
-      <div class="collection-grid" id="collectionGrid"></div>
-    </section>
+<form id="moodifyTimeForm">
+<div class="moodifyTimeInputs">
+<label>
+Hours
+<input id="moodifyHours" type="number" min="0" max="3" value="0" required>
+</label>
 
-    <section class="page" id="profile" hidden>
-      <div class="intro">
-        <small class="eyebrow">Your creative identity</small>
-        <h1>The <em>Creator.</em></h1>
-      </div>
+<label>
+Minutes
+<input id="moodifyMinutes" type="number" min="0" max="59" value="15" required>
+</label>
+</div>
 
-      <article class="panel profile-card">
-        <h2 id="profileName">Creative Explorer</h2>
-        <p id="profileDetail">Guest profile on this browser.</p>
-        <button class="quiet" id="profileLogin">Log in</button>
-        <button class="quiet" id="logoutButton" hidden>Log out</button>
-      </article>
+<p id="moodifyTimeError"></p>
 
-      <h2 class="section-title">Achievements</h2>
-      <div class="panel" id="achievements"></div>
-    </section>
+<button id="moodifyEnter" type="submit">
+Enter Moodify
+</button>
+</form>
+</div>
+</div>
 
-    <footer>
-      <strong>MOODIFY<span class="brand-dot">.</span></strong>
-      <small>© 2026 Moodify Creative Universe</small>
-    </footer>
-  </main>
+<script>
+(function () {
+"use strict";
 
-  <dialog id="authDialog">
-    <form id="authForm">
-      <div class="dialog-heading">
-        <h2 id="authTitle">Log in</h2>
-        <button type="button" class="quiet" id="closeAuth" aria-label="Close">Close</button>
-      </div>
+const overlay = document.getElementById("moodifyWelcome");
+const form = document.getElementById("moodifyTimeForm");
+const hoursInput = document.getElementById("moodifyHours");
+const minutesInput = document.getElementById("moodifyMinutes");
+const error = document.getElementById("moodifyTimeError");
 
-      <p class="hint">This profile and its collection are saved on this browser.</p>
+const storageKey = "moodifyWelcomeTime";
+let saved = null;
 
-      <label id="nameLabel" for="authName">Display name</label>
-      <input id="authName" autocomplete="nickname" maxlength="40">
+try {
+saved = JSON.parse(sessionStorage.getItem(storageKey));
+} catch (e) {}
 
-      <label for="authEmail">Email</label>
-      <input id="authEmail" type="email" autocomplete="username" required>
+if (
+saved &&
+Number.isInteger(saved.minutes) &&
+saved.minutes >= 1 &&
+saved.minutes <= 180 &&
+saved.until > Date.now()
+) {
+window.moodifyVisitMinutes = saved.minutes;
+overlay.hidden = true;
+} else {
+overlay.hidden = false;
+}
 
-      <label for="authPassword">Password</label>
-      <input id="authPassword" type="password" autocomplete="current-password" required>
+form.addEventListener("submit", function (event) {
+event.preventDefault();
 
-      <p id="authError" class="form-error" role="alert"></p>
-      <button id="authSubmit" class="primary" type="submit">Log in</button>
-      <button id="switchAuth" class="text-button" type="button">Create an account</button>
-    </form>
-  </dialog>
+const hours = Number(hoursInput.value);
+const minutes = Number(minutesInput.value);
+const total = hours * 60 + minutes;
 
-  <div id="toast" role="status"></div>
+if (
+!Number.isInteger(hours) ||
+!Number.isInteger(minutes) ||
+hours < 0 ||
+hours > 3 ||
+minutes < 0 ||
+minutes > 59 ||
+total < 1 ||
+total > 180
+) {
+error.textContent =
+"Please choose between 1 minute and 3 hours.";
+return;
+}
+
+window.moodifyVisitMinutes = total;
+
+try {
+sessionStorage.setItem(
+storageKey,
+JSON.stringify({
+minutes: total,
+until: Date.now() + total * 60000
+})
+);
+} catch (e) {}
+
+overlay.hidden = true;
+
+window.dispatchEvent(
+new CustomEvent("moodify:visit-selected", {
+detail: { minutes: total }
+})
+);
+});
+})();
+</script>
+<!-- MOODIFY EXTRA CHALLENGE -->
+
+<style>
+.extra-game {
+width: 100%;
+max-width: 650px;
+margin: 0 auto;
+text-align: center;
+}
+
+.extra-header {
+display: flex;
+justify-content: space-between;
+flex-wrap: wrap;
+gap: 10px;
+margin: 15px 0;
+font-weight: bold;
+}
+
+.extra-grid {
+display: grid;
+gap: 9px;
+margin: 20px auto;
+max-width: 520px;
+}
+
+.extra-tile {
+aspect-ratio: 1;
+min-height: 40px;
+border: 1px solid #bca0ed66;
+border-radius: 12px;
+background: #5a417d;
+color: white;
+font-size: clamp(14px, 3vw, 23px);
+font-weight: bold;
+cursor: pointer;
+transition: 0.15s;
+}
+
+.extra-tile:hover {
+background: #8d65b6;
+}
+
+.extra-tile.correct {
+background: #438f76;
+color: white;
+}
+
+.extra-tile.wrong {
+background: #ba526c;
+}
+
+.extra-action {
+padding: 12px 22px;
+border: none;
+border-radius: 12px;
+background: #c5a4f5;
+color: #21152d;
+font-weight: bold;
+cursor: pointer;
+margin: 8px;
+}
+
+.extra-progress {
+width: 100%;
+height: 10px;
+border-radius: 20px;
+background: #7775;
+overflow: hidden;
+margin-top: 15px;
+}
+
+.extra-progress-fill {
+height: 100%;
+background: #b997ef;
+transition: width 0.25s;
+}
+
+@media (max-width: 480px) {
+.extra-grid {
+gap: 5px;
+}
+
+.extra-tile {
+min-height: 32px;
+border-radius: 7px;
+}
+}
+</style>
+
+<script>
+(function () {
+"use strict";
+
+/* CONNECT AESTHETIC UNIVERSE TO CREATIVE STUDIO */
+
+choices.hidden = true;
+
+const themeSelect = document.getElementById("themeSelect");
+
+const themeMap = {
+luxury: "oldmoney",
+minimal: "cottage",
+summer: "cottage",
+dark: "dark",
+pastel: "coquette",
+cyber: "y2k"
+};
+
+function syncWithStudio() {
+if (!themeSelect) return;
+
+const selected = themeSelect.value;
+
+const key = themeMap[selected] ||
+(data[selected] ? selected : null);
+
+if (key) {
+render(key);
+}
+}
+
+if (themeSelect) {
+themeSelect.addEventListener(
+"change",
+syncWithStudio
+);
+
+window.addEventListener(
+"load",
+syncWithStudio
+);
+
+syncWithStudio();
+}
+
+
+function initializeExtraChallenge() {
+const menu = document.querySelector("#arcade .game-menu");
+const surface = document.getElementById("gameSurface");
+const title = document.getElementById("gameTitle");
+const rules = document.getElementById("gameRules");
+const status = document.getElementById("gameStatus");
+
+if (!menu || !surface || !title || !rules) {
+return;
+}
+
+if (menu.querySelector(".extra-game-button")) {
+return;
+}
+
+const extraButton = document.createElement("button");
+extraButton.type = "button";
+extraButton.textContent = "✨ Extra Challenge";
+extraButton.className = "extra-game-button";
+
+menu.appendChild(extraButton);
+
+let currentLevel = 1;
+let expected = 1;
+let seconds = 0;
+let timer = null;
+let active = false;
+let playingExtra = false;
+let maxLevels = 8;
+
+function getVisitMinutes() {
+if (
+Number.isFinite(window.moodifyVisitMinutes) &&
+window.moodifyVisitMinutes >= 1
+) {
+return window.moodifyVisitMinutes;
+}
+
+try {
+const saved = JSON.parse(
+sessionStorage.getItem("moodifyWelcomeTime")
+);
+
+if (saved && saved.until > Date.now()) {
+return Number(saved.minutes) || 15;
+}
+} catch (error) {}
+
+return 15;
+}
+
+function calculateMaxLevels(minutes) {
+if (minutes <= 15) return 8;
+if (minutes <= 30) return 10;
+if (minutes <= 60) return 12;
+if (minutes <= 90) return 15;
+if (minutes <= 120) return 18;
+return 20;
+}
+
+function shuffle(numbers) {
+const result = [...numbers];
+
+for (let i = result.length - 1; i > 0; i--) {
+const j = Math.floor(Math.random() * (i + 1));
+
+[result[i], result[j]] = [
+result[j],
+result[i]
+];
+}
+
+return result;
+}
+
+function stopTimer() {
+if (timer !== null) {
+clearInterval(timer);
+timer = null;
+}
+}
+
+function getLevelSettings(level) {
+let columns;
+
+if (level <= 4) {
+columns = 3;
+} else if (level <= 9) {
+columns = 4;
+} else if (level <= 15) {
+columns = 5;
+} else {
+columns = 6;
+}
+
+const count = columns * columns;
+
+const timeLimit = Math.max(
+12,
+Math.round(count * 2.5 - level * 0.9)
+);
+
+return {
+columns,
+count,
+timeLimit
+};
+}
+
+function makeElement(tag, className, text) {
+const element = document.createElement(tag);
+
+if (className) {
+element.className = className;
+}
+
+if (text !== undefined) {
+element.textContent = text;
+}
+
+return element;
+}
+
+function showMessage(message) {
+if (status) {
+status.textContent = message;
+}
+}
+
+function startLevel() {
+stopTimer();
+
+active = true;
+expected = 1;
+
+const settings = getLevelSettings(currentLevel);
+
+seconds = settings.timeLimit;
+
+surface.innerHTML = "";
+
+title.textContent = "Extra Challenge";
+
+rules.textContent =
+"Tap the numbers in order, starting from 1. " +
+"Finish before the timer reaches zero!";
+
+const game = makeElement("div", "extra-game");
+const header = makeElement("div", "extra-header");
+
+const levelText = makeElement(
+"span",
+"",
+"Level " + currentLevel + " / " + maxLevels
+);
+
+const timeText = makeElement(
+"span",
+"",
+"⏱️ " + seconds + "s"
+);
+
+const targetText = makeElement(
+"span",
+"",
+"Find: 1"
+);
+
+header.append(
+levelText,
+timeText,
+targetText
+);
+
+const progress = makeElement(
+"div",
+"extra-progress"
+);
+
+const progressFill = makeElement(
+"div",
+"extra-progress-fill"
+);
+
+progressFill.style.width = "0%";
+progress.appendChild(progressFill);
+
+const grid = makeElement(
+"div",
+"extra-grid"
+);
+
+grid.style.gridTemplateColumns =
+"repeat(" + settings.columns + ", 1fr)";
+
+const numbers = shuffle(
+Array.from(
+{ length: settings.count },
+(_, index) => index + 1
+)
+);
+
+numbers.forEach(function (number) {
+const tile = makeElement(
+"button",
+"extra-tile",
+String(number)
+);
+
+tile.type = "button";
+
+tile.addEventListener("click", function () {
+if (!active || !playingExtra) {
+return;
+}
+
+if (number !== expected) {
+tile.classList.add("wrong");
+
+setTimeout(function () {
+tile.classList.remove("wrong");
+}, 250);
+
+showMessage(
+"Not quite! Find number " + expected
+);
+
+return;
+}
+
+tile.classList.add("correct");
+tile.disabled = true;
+
+expected++;
+
+progressFill.style.width =
+((expected - 1) / settings.count * 100) + "%";
+
+if (expected > settings.count) {
+finishLevel(true);
+} else {
+targetText.textContent =
+"Find: " + expected;
+
+showMessage("Great! Keep going.");
+}
+});
+
+grid.appendChild(tile);
+});
+
+game.append(
+header,
+progress,
+grid
+);
+
+surface.appendChild(game);
+
+showMessage(
+"Level " + currentLevel + " started. Good luck!"
+);
+
+timer = setInterval(function () {
+if (!playingExtra || !active) {
+stopTimer();
+return;
+}
+
+seconds--;
+
+timeText.textContent =
+"⏱️ " + seconds + "s";
+
+if (seconds <= 0) {
+finishLevel(false);
+}
+}, 1000);
+}
+
+function finishLevel(won) {
+if (!active) {
+return;
+}
+
+active = false;
+stopTimer();
+
+const game = surface.querySelector(".extra-game");
+
+if (!game) {
+return;
+}
+
+game.querySelectorAll(".extra-tile").forEach(
+function (button) {
+button.disabled = true;
+}
+);
+
+if (!won) {
+showMessage(
+"Time is up! Try Level " +
+currentLevel + " again."
+);
+
+const retry = makeElement(
+"button",
+"extra-action",
+"Try Again"
+);
+
+retry.type = "button";
+retry.addEventListener("click", startLevel);
+game.appendChild(retry);
+
+return;
+}
+
+if (currentLevel >= maxLevels) {
+showMessage(
+"Amazing! You completed all " +
+maxLevels + " levels!"
+);
+
+const restart = makeElement(
+"button",
+"extra-action",
+"Play Again"
+);
+
+restart.type = "button";
+
+restart.addEventListener("click", function () {
+currentLevel = 1;
+startLevel();
+});
+
+game.appendChild(restart);
+
+return;
+}
+
+showMessage(
+"Level " + currentLevel + " completed!"
+);
+
+const next = makeElement(
+"button",
+"extra-action",
+"Next Level →"
+);
+
+next.type = "button";
+
+next.addEventListener("click", function () {
+currentLevel++;
+startLevel();
+});
+
+game.appendChild(next);
+}
+
+extraButton.addEventListener("click", function () {
+playingExtra = true;
+
+maxLevels = calculateMaxLevels(
+getVisitMinutes()
+);
+
+currentLevel = 1;
+startLevel();
+});
+
+menu.addEventListener("click", function (event) {
+const otherGame = event.target.closest(
+"[data-game]"
+);
+
+if (otherGame) {
+playingExtra = false;
+active = false;
+stopTimer();
+}
+});
+
+window.addEventListener(
+"moodify:visit-selected",
+function () {
+maxLevels = calculateMaxLevels(
+getVisitMinutes()
+);
+
+if (playingExtra) {
+currentLevel = 1;
+startLevel();
+}
+}
+);
+
+window.addEventListener(
+"beforeunload",
+stopTimer
+);
+}
+
+if (document.readyState === "loading") {
+document.addEventListener(
+"DOMContentLoaded",
+initializeExtraChallenge
+);
+} else {
+initializeExtraChallenge();
+}
+})();
+</script>
+<aside class="sidebar">
+<a class="brand" href="#home" data-open="home">
+<span class="brand-mark">
+<span aria-hidden="true">M</span>
+<img src="photo.jpg" alt="" onerror="this.hidden=true">
+</span>
+MOODIFY<span class="brand-dot">.</span>
+</a>
+
+<nav aria-label="Main navigation">
+<p class="nav-label">Workspace</p>
+
+<button class="nav-link active" data-open="home">
+Overview
+</button>
+
+<button class="nav-link" data-open="studio">
+Creative Studio
+</button>
+
+<button class="nav-link" data-open="discover">
+Discover
+</button>
+
+<p class="nav-label">Entertainment</p>
+
+<button class="nav-link" data-open="arcade">
+Moodify Arcade
+</button>
+
+<button class="nav-link" data-open="music">
+Playlist
+</button>
+
+<p class="nav-label">Personal</p>
+
+<button class="nav-link" data-open="collection">
+My Collection
+</button>
+
+<button class="nav-link" data-open="profile">
+My Profile
+</button>
+</nav>
+
+<div class="sidebar-foot">
+<button id="themeToggle" class="quiet">
+Light mode
+</button>
+<small>MOODIFY © 2026</small>
+</div>
+</aside>
+
+<main>
+<header class="topbar">
+<div>
+<small class="eyebrow">
+Your creative universe
+</small>
+<strong id="pageHeading">Overview</strong>
+</div>
+
+<div class="account-corner">
+<button id="loginButton" class="quiet">
+Log in
+</button>
+
+<button id="signupButton" class="primary">
+Sign up
+</button>
+
+<button
+id="accountButton"
+class="quiet"
+data-open="profile"
+hidden
+></button>
+</div>
+</header>
+
+<!-- OVERVIEW -->
+
+<section class="page" id="home">
+<div class="hero">
+<div>
+<small class="eyebrow">
+Creative Studio
+</small>
+
+<h1>
+Imagine it.<br>
+<em>Create it.</em>
+</h1>
+
+<p>
+A space where your ideas become
+visual experiences.
+</p>
+
+<button class="primary" data-open="studio">
+Enter Creative Studio
+</button>
+</div>
+
+<div class="hero-art" aria-hidden="true">
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+
+<h2 class="section-title">
+Creative overview
+</h2>
+
+<div class="stats">
+<article>
+<small>Boards created</small>
+<strong data-stat="boards">0</strong>
+</article>
+
+<article>
+<small>Games played</small>
+<strong data-stat="games">0</strong>
+</article>
+
+<article>
+<small>Arcade score</small>
+<strong data-stat="score">0</strong>
+</article>
+
+<article>
+<small>Creative level</small>
+<strong data-stat="level">01</strong>
+</article>
+</div>
+
+<h2 class="section-title">
+Choose your experience
+</h2>
+
+<div class="feature-grid">
+<button class="feature" data-open="studio">
+<strong>Creative Studio</strong>
+<small>Build a mood board.</small>
+</button>
+
+<button class="feature" data-open="arcade">
+<strong>Arcade</strong>
+<small>Play a short puzzle.</small>
+</button>
+
+<button class="feature" data-open="discover">
+<strong>Discover</strong>
+<small>Explore six aesthetics and their sounds.</small>
+</button>
+</div>
+</section>
+
+<!-- CREATIVE STUDIO -->
+
+<section class="page" id="studio" hidden>
+<div class="intro">
+<small class="eyebrow">
+The design lab
+</small>
+
+<h1>
+Make your <em>vision.</em>
+</h1>
+</div>
+
+<div class="studio-layout">
+<div class="panel editor">
+<h2>Design controls</h2>
+
+<label for="boardTitle">
+Board title
+</label>
+
+<input
+id="boardTitle"
+placeholder="My creative universe"
+maxlength="80"
+>
+
+<label for="themeSelect">
+Aesthetic
+</label>
+
+<select id="themeSelect"></select>
+
+<label for="accentInput">
+Accent color
+</label>
+
+<input
+id="accentInput"
+type="color"
+value="#ad91e4"
+>
+
+<button class="primary" id="generateBoard">
+Generate board
+</button>
+
+<button class="quiet" id="randomColor">
+Randomize color
+</button>
+
+<button class="quiet" id="studioSound">
+Play aesthetic sound
+</button>
+
+<label for="imageUpload">
+Add a photograph
+</label>
+
+<input
+id="imageUpload"
+type="file"
+accept="image/*"
+>
+
+<button class="quiet" id="saveBoard">
+Save board
+</button>
+
+<button class="quiet" id="exportBoard">
+Export as PNG
+</button>
+</div>
+
+<div class="panel canvas-panel">
+<div id="moodBoard">
+<small class="eyebrow">
+Moodify / Original series
+</small>
+
+<div class="board-heading">
+<h2 id="displayTitle"></h2>
+<small id="boardDate"></small>
+</div>
+
+<div class="mood-grid" id="moodGrid"></div>
+
+<small>
+MOODIFY CREATIVE STUDIO
+</small>
+</div>
+
+<p class="hint">
+Drag cards to rearrange your board.
+</p>
+</div>
+</div>
+</section>
+
+<!-- DISCOVER -->
+
+<section class="page" id="discover" hidden>
+<div class="intro">
+<small class="eyebrow">
+The inspiration library
+</small>
+
+<h1>
+Discover your <em>aesthetic.</em>
+</h1>
+
+<p>
+Explore a visual collection or listen
+to its sound.
+</p>
+</div>
+
+<div class="discover-grid" id="discoverGrid"></div>
+
+<!-- THE NEW AESTHETIC BOARD WILL APPEAR HERE -->
+</section>
+
+<!-- ARCADE -->
+
+<section class="page" id="arcade" hidden>
+<div class="intro">
+<small class="eyebrow">
+Moodify entertainment system
+</small>
+
+<h1>
+Enter the <em>Arcade.</em>
+</h1>
+</div>
+
+<div class="stats arcade-stats">
+<article>
+<small>Your score</small>
+<strong data-stat="score">0</strong>
+</article>
+
+<article>
+<small>Games played</small>
+<strong data-stat="games">0</strong>
+</article>
+
+<article>
+<small>Your rank</small>
+<strong data-stat="rank">Rookie</strong>
+</article>
+</div>
+
+<div class="game-menu" aria-label="Choose a game">
+<button data-game="paint">
+Color by Numbers
+</button>
+
+<button data-game="slide">
+Sliding Puzzle
+</button>
+
+<button data-game="water">
+Water Sort
+</button>
+
+<button data-game="word">
+Daily Word
+</button>
+</div>
+
+<article class="panel arena">
+<h2 id="gameTitle"></h2>
+<p id="gameRules"></p>
+<div id="gameSurface"></div>
+
+<p
+class="game-status"
+id="gameStatus"
+aria-live="polite"
+></p>
+</article>
+</section>
+
+<!-- PLAYLIST -->
+
+<section class="page" id="music" hidden>
+<div class="intro">
+<small class="eyebrow">
+Moodify audio
+</small>
+
+<h1>
+Studio <em>playlist.</em>
+</h1>
+
+<p>
+Four original instrumental sketches.
+Listen here or download a WAV file.
+</p>
+</div>
+
+<div class="panel">
+<div id="trackList"></div>
+
+<div class="player">
+<small class="eyebrow">
+Now playing
+</small>
+
+<strong id="nowPlaying">
+Choose a track
+</strong>
+
+<audio
+id="audioPlayer"
+controls
+preload="none"
+></audio>
+</div>
+</div>
+</section>
+
+<!-- MY COLLECTION -->
+
+<section class="page" id="collection" hidden>
+<div class="intro">
+<small class="eyebrow">
+Your personal archive
+</small>
+
+<h1>
+Made by <em>you.</em>
+</h1>
+</div>
+
+<div
+class="collection-grid"
+id="collectionGrid"
+></div>
+</section>
+
+<!-- PROFILE -->
+
+<section class="page" id="profile" hidden>
+<div class="intro">
+<small class="eyebrow">
+Your creative identity
+</small>
+
+<h1>
+The <em>Creator.</em>
+</h1>
+</div>
+
+<article class="panel profile-card">
+<h2 id="profileName">
+Creative Explorer
+</h2>
+
+<p id="profileDetail">
+Guest profile on this browser.
+</p>
+
+<button class="quiet" id="profileLogin">
+Log in
+</button>
+
+<button class="quiet" id="logoutButton" hidden>
+Log out
+</button>
+</article>
+
+<h2 class="section-title">
+Achievements
+</h2>
+
+<div
+class="panel"
+id="achievements"
+></div>
+</section>
+
+<footer>
+<strong>
+MOODIFY<span class="brand-dot">.</span>
+</strong>
+
+<small>
+© 2026 Moodify Creative Universe
+</small>
+</footer>
+</main>
+
+<!-- ACCOUNT DIALOG -->
+
+<dialog id="authDialog">
+<form id="authForm">
+<div class="dialog-heading">
+<h2 id="authTitle">Log in</h2>
+
+<button
+type="button"
+class="quiet"
+id="closeAuth"
+aria-label="Close"
+>
+Close
+</button>
+</div>
+
+<p class="hint">
+This profile and its collection
+are saved on this browser.
+</p>
+
+<label id="nameLabel" for="authName">
+Display name
+</label>
+
+<input
+id="authName"
+autocomplete="nickname"
+maxlength="40"
+>
+
+<label for="authEmail">
+Email
+</label>
+
+<input
+id="authEmail"
+type="email"
+autocomplete="username"
+required
+>
+
+<label for="authPassword">
+Password
+</label>
+
+<input
+id="authPassword"
+type="password"
+autocomplete="current-password"
+required
+>
+
+<p
+id="authError"
+class="form-error"
+role="alert"
+></p>
+
+<button
+id="authSubmit"
+class="primary"
+type="submit"
+>
+Log in
+</button>
+
+<button
+id="switchAuth"
+class="text-button"
+type="button"
+>
+Create an account
+</button>
+</form>
+</dialog>
+
+<div id="toast" role="status"></div>
+<!-- MOODIFY AESTHETIC UNIVERSE -->
+
+<style>
+#mfAesthetic {
+margin: 30px 0;
+padding: 25px;
+border: 1px solid #b99bd044;
+border-radius: 24px;
+background: linear-gradient(135deg,#a886bc18,#e8b5ce12);
+color: inherit;
+}
+
+#mfAesthetic * {
+box-sizing: border-box;
+}
+
+#mfAesthetic .mfIntro {
+text-align: center;
+margin-bottom: 24px;
+}
+
+#mfAesthetic .mfIntro h2 {
+margin: 0 0 8px;
+font-size: clamp(24px,4vw,34px);
+}
+
+#mfAesthetic .mfIntro p {
+opacity: 0.75;
+}
+
+#mfAesthetic .mfChoices {
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+gap: 10px;
+margin-bottom: 22px;
+}
+
+#mfAesthetic .mfChoice {
+border: 1px solid #b99bd066;
+background: #aa8bc122;
+color: inherit;
+border-radius: 30px;
+padding: 11px 16px;
+cursor: pointer;
+font: inherit;
+}
+
+#mfAesthetic .mfChoice.selected {
+background: #b99add;
+color: #21162b;
+}
+
+#mfAesthetic .mfBanner {
+padding: 32px 20px;
+text-align: center;
+border-radius: 18px;
+color: white;
+background: var(--mfGradient);
+}
+
+#mfAesthetic .mfBanner h3 {
+font-family: Georgia,serif;
+font-size: clamp(26px,4vw,40px);
+margin: 0 0 10px;
+}
+
+#mfAesthetic .mfBanner p {
+max-width: 550px;
+margin: auto;
+line-height: 1.6;
+}
+
+#mfAesthetic .mfCards {
+display: grid;
+grid-template-columns: repeat(2,minmax(0,1fr));
+gap: 16px;
+margin-top: 18px;
+}
+
+#mfAesthetic .mfCard {
+padding: 20px;
+border: 1px solid #b99bd044;
+border-radius: 17px;
+background: #a886bc12;
+min-width: 0;
+}
+
+#mfAesthetic .mfCard h4 {
+margin: 0 0 16px;
+}
+
+#mfAesthetic .mfBook {
+display: flex;
+align-items: center;
+gap: 12px;
+margin-bottom: 14px;
+}
+
+#mfAesthetic .mfCover {
+width: 52px;
+min-width: 52px;
+height: 72px;
+border-radius: 5px 9px 9px 5px;
+display: grid;
+place-items: center;
+background: var(--cover);
+box-shadow: inset 5px 0 #0003,3px 5px 9px #0002;
+font-size: 24px;
+}
+
+#mfAesthetic .mfBook strong,
+#mfAesthetic .mfMovie strong {
+display: block;
+font-size: 14px;
+}
+
+#mfAesthetic .mfBook small,
+#mfAesthetic .mfMovie small {
+display: block;
+opacity: 0.65;
+margin-top: 4px;
+}
+
+#mfAesthetic .mfQuote {
+padding: 14px;
+margin-bottom: 10px;
+border-radius: 12px;
+background: #b99bd018;
+font-family: Georgia,serif;
+font-style: italic;
+line-height: 1.7;
+}
+
+#mfAesthetic .mfMovie {
+display: flex;
+align-items: center;
+gap: 12px;
+padding: 12px;
+margin-bottom: 10px;
+border-radius: 12px;
+background: #b99bd018;
+}
+
+#mfAesthetic .mfMovie span {
+font-size: 25px;
+}
+
+#mfAesthetic .mfColors {
+display: flex;
+gap: 7px;
+margin-bottom: 16px;
+}
+
+#mfAesthetic .mfColor {
+flex: 1;
+height: 65px;
+border-radius: 9px;
+}
+
+#mfAesthetic .mfTags {
+display: flex;
+flex-wrap: wrap;
+gap: 8px;
+}
+
+#mfAesthetic .mfTag {
+padding: 9px 12px;
+background: #b99bd020;
+border-radius: 20px;
+font-size: 12px;
+}
+
+#mfAesthetic .mfHint {
+text-align: center;
+padding: 20px;
+opacity: 0.7;
+}
+
+@media(max-width:650px) {
+#mfAesthetic {
+padding: 16px;
+}
+
+#mfAesthetic .mfCards {
+grid-template-columns: 1fr;
+}
+}
+</style>
+
+<script>
+(function () {
+"use strict";
+
+function startAesthetic() {
+const discover = document.getElementById("discover");
+
+if (!discover) return;
+if (document.getElementById("mfAesthetic")) return;
+
+const data = {
+dark: {
+name: "Dark Academia",
+description: "Old libraries, poetry, rainy days and mysterious stories.",
+gradient: "linear-gradient(135deg,#29221f,#685044)",
+colors: ["#302820","#544338","#78634D","#A18A6D","#D8C5A4"],
+books: [
+["The Secret History","Donna Tartt"],
+["Jane Eyre","Charlotte Brontë"],
+["The Picture of Dorian Gray","Oscar Wilde"]
+],
+quotes: [
+"Some stories are written in the margins.",
+"A quiet room can hold a thousand worlds.",
+"Curiosity is a beautiful kind of courage."
+],
+movies: [
+["Dead Poets Society","1989"],
+["Little Women","2019"],
+["Good Will Hunting","1997"]
+],
+details: [" Coffee"," Candles"," Poetry"," Rain"," Piano"]
+},
+
+coquette: {
+name: "Coquette",
+description: "Ribbons, delicate flowers, soft pink and romantic stories.",
+gradient: "linear-gradient(135deg,#c77fa6,#eec1d6)",
+colors: ["#F8E5ED","#EFC9DA","#DDA8C4","#FFF5F7","#B987A7"],
+books: [
+["Emma","Jane Austen",],
+["Little Women","Louisa May Alcott"],
+["Anne of Green Gables","L. M. Montgomery"]
+],
+quotes: [
+"Romance lives in the smallest details.",
+"Make ordinary days feel beautiful.",
+"Softness can be its own kind of strength."
+],
+movies: [
+["Marie Antoinette","2006"],
+["Pride & Prejudice","2005"],
+["The Princess Diaries","2001"]
+],
+details: [" Ribbons","Flowers"," Letters"," Ballet"," Tea"]
+},
+
+oldmoney: {
+name: "Old Money",
+description: "Timeless elegance, classic fashion and understated luxury.",
+gradient: "linear-gradient(135deg,#414a3d,#a49a7c)",
+colors: ["#E9E0CF","#B9AD92","#73765A","#4B5447","#302E29"],
+books: [
+["The Great Gatsby","F. Scott Fitzgerald"],
+["The Age of Innocence","Edith Wharton"],
+["Brideshead Revisited","Evelyn Waugh"]
+],
+quotes: [
+"Elegance does not need to be loud.",
+"Choose timeless over temporary.",
+"The smallest details tell the story."
+],
+movies: [
+["Roman Holiday","1953"],
+["The Talented Mr. Ripley","1999"],
+["The Great Gatsby","2013"]
+],
+details: [" Tennis"," Pearls"," Espresso"," Jazz"," Classics"]
+},
+
+cottage: {
+name: "Cottagecore",
+description: "Wildflowers, countryside mornings and peaceful nature.",
+gradient: "linear-gradient(135deg,#062B1F,#c4b18b)",
+colors: ["#E8DDC5","#C7D2AC","#8EAA82","#B98F71","#6D7652"],
+books: [
+["The Secret Garden","Frances Hodgson Burnett"],
+["Anne of Green Gables","L. M. Montgomery"],
+["The Wind in the Willows","Kenneth Grahame"]
+],
+quotes: [
+"Grow slowly and beautifully.",
+"There is magic in ordinary mornings.",
+"Let the little things be enough."
+],
+movies: [
+["The Secret Garden","1993"],
+["Little Women","2019"],
+["My Neighbor Totoro","1988"]
+],
+details: [" Flowers"," Berries"," Mushrooms","Picnics"," Gardens"]
+},
+
+y2k: {
+name: "Y2K",
+description: "Bright colors, retro technology and playful pop energy.",
+gradient: "linear-gradient(135deg,#a15acb,#ef8bc3)",
+colors: ["#FF85CE","#D9B5FF","#8ACBFF","#C6D2E1","#7654B8"],
+books: [
+["The Princess Diaries","Meg Cabot"],
+["Confessions of a Shopaholic","Sophie Kinsella"],
+["Angus, Thongs and Full-Frontal Snogging","Louise Rennison"]
+],
+quotes: [
+"Make your own kind of iconic.",
+"Be the color in your own story.",
+"A little sparkle changes everything."
+],
+movies: [
+["Mean Girls","2004"],
+["Legally Blonde","2001"],
+["13 Going on 30","2004"]
+],
+details: [" CDs"," Flip phones"," Glitter"," Pink"," Pop"]
+},
+
+whimsigoth: {
+name: "Whimsigoth",
+description: "Moonlight, velvet, celestial details and vintage mystery.",
+gradient: "linear-gradient(135deg,#24172f,#72517d)",
+colors: ["#251A36","#49335D","#785A8D","#B494A7","#D7C3A2"],
+books: [
+["The Night Circus","Erin Morgenstern"],
+["Howl's Moving Castle","Diana Wynne Jones"],
+["The Ocean at the End of the Lane","Neil Gaiman"]
+],
+quotes: [
+"Carry a little wonder wherever you go.",
+"Even the night has its own colors.",
+"Let imagination find its way home."
+],
+movies: [
+["Practical Magic","1998"],
+["Coraline","2009"],
+["Stardust","2007"]
+],
+details: [" Moonlight"," Crystals"," Stars"," Candles"," Planets"]
+}
+};
+
+const board = document.createElement("section");
+board.id = "mfAesthetic";
+
+board.innerHTML = `
+<div class="mfIntro">
+<h2> Your Aesthetic Universe</h2>
+<p>Choose your aesthetic and reveal your personal inspiration board.</p>
+</div>
+
+<div class="mfChoices" id="mfChoices"></div>
+
+<div class="mfHint" id="mfHint">
+ Choose an aesthetic to begin.
+</div>
+
+<div id="mfResult" hidden>
+<div class="mfBanner" id="mfBanner">
+<h3 id="mfName"></h3>
+<p id="mfDescription"></p>
+</div>
+
+<div class="mfCards">
+<article class="mfCard">
+<h4> Your Little Library</h4>
+<div id="mfBooks"></div>
+</article>
+
+<article class="mfCard">
+<h4> Little Sayings</h4>
+<div id="mfQuotes"></div>
+</article>
+
+<article class="mfCard">
+<h4> Movie Nights</h4>
+<div id="mfMovies"></div>
+</article>
+
+<article class="mfCard">
+<h4> Colors & Little Things</h4>
+<div class="mfColors" id="mfColors"></div>
+<div class="mfTags" id="mfDetails"></div>
+</article>
+</div>
+</div>
+`;
+
+const originalGrid = discover.querySelector("#discoverGrid");
+
+if (originalGrid) {
+originalGrid.insertAdjacentElement("afterend", board);
+} else {
+discover.appendChild(board);
+}
+
+const find = id => board.querySelector("#" + id);
+const choices = find("mfChoices");
+
+function create(tag, className, content) {
+const element = document.createElement(tag);
+element.className = className;
+element.textContent = content;
+return element;
+}
+
+function render(key) {
+const item = data[key];
+if (!item) return;
+
+find("mfHint").hidden = true;
+find("mfResult").hidden = false;
+
+find("mfBanner").style.setProperty(
+"--mfGradient",
+item.gradient
+);
+
+find("mfName").textContent =
+item.emoji + " " + item.name;
+
+find("mfDescription").textContent =
+item.description;
+
+const books = find("mfBooks");
+books.replaceChildren();
+
+item.books.forEach((book, index) => {
+const row = create("div", "mfBook", "");
+const cover = create("div", "mfCover", book[2]);
+
+cover.style.setProperty(
+"--cover",
+item.colors[index]
+);
+
+const info = document.createElement("div");
+
+info.append(
+create("strong", "", book[0]),
+create("small", "", book[1])
+);
+
+row.append(cover, info);
+books.appendChild(row);
+});
+
+const quotes = find("mfQuotes");
+quotes.replaceChildren();
+
+item.quotes.forEach(quote => {
+quotes.appendChild(
+create("div", "mfQuote", "“" + quote + "”")
+);
+});
+
+const movies = find("mfMovies");
+movies.replaceChildren();
+
+item.movies.forEach(movie => {
+const row = create("div", "mfMovie", "");
+const emoji = create("span", "", movie[2]);
+const info = document.createElement("div");
+
+info.append(
+create("strong", "", movie[0]),
+create("small", "", movie[1])
+);
+
+row.append(emoji, info);
+movies.appendChild(row);
+});
+
+const colors = find("mfColors");
+colors.replaceChildren();
+
+item.colors.forEach(color => {
+const swatch = create("div", "mfColor", "");
+
+swatch.style.backgroundColor = color;
+swatch.title = color;
+
+colors.appendChild(swatch);
+});
+
+const details = find("mfDetails");
+details.replaceChildren();
+
+item.details.forEach(detail => {
+details.appendChild(
+create("span", "mfTag", detail)
+);
+});
+
+choices.querySelectorAll("button").forEach(button => {
+button.classList.toggle(
+"selected",
+button.dataset.key === key
+);
+});
+}
+
+Object.entries(data).forEach(([key, item]) => {
+const button = create(
+"button",
+"mfChoice",
+item.emoji + " " + item.name
+);
+
+button.type = "button";
+button.dataset.key = key;
+
+button.addEventListener("click", () => render(key));
+
+choices.appendChild(button);
+});
+}
+
+if (document.readyState === "loading") {
+document.addEventListener(
+"DOMContentLoaded",
+startAesthetic
+);
+} else {
+startAesthetic();
+}
+})();
+</script>
+
+<!-- END MOODIFY AESTHETIC UNIVERSE -->
+
 </body>
 </html>

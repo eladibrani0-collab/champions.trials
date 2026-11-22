@@ -815,3 +815,462 @@ html.light .hero .hero-art span {
 #discover .lookbook-actions .remove-photo:hover {
   background: #46334e;
 }
+
+/* Discover: styles and filters above the photo gallery */
+
+#discover #discoverGrid.lookbook {
+display: flex;
+flex-direction: column;
+align-items: stretch;
+gap: 14px;
+width: 100%;
+min-width: 0;
+}
+
+#discover #discoverGrid.lookbook > * {
+min-width: 0;
+margin: 0;
+}
+
+/* Aesthetic buttons */
+
+#discover .lookbook-tabs,
+#discover .photo-filters,
+#discover .lookbook-actions,
+#discover .lookbook-audio {
+display: flex;
+flex-wrap: wrap;
+align-items: center;
+gap: 8px;
+}
+
+#discover .lookbook-tab {
+padding: 8px 14px;
+border: 1px solid var(--line, #ffffff24);
+border-radius: 20px;
+background: var(--panel, #15121e);
+color: var(--text, #f5f0ff);
+font: inherit;
+font-size: 13px;
+cursor: pointer;
+}
+
+#discover .lookbook-tab[aria-pressed="true"] {
+border-color: var(--accent, #a98aff);
+background: var(--raised, #1d1829);
+box-shadow: inset 0 0 0 1px var(--accent, #a98aff);
+}
+
+/* Color filters on the left, Add photos on the right */
+
+#discover .photo-toolbar {
+display: flex;
+flex-wrap: wrap;
+align-items: center;
+justify-content: space-between;
+gap: 12px;
+}
+
+/* Main photograph and its information */
+
+#discover .lookbook-layout {
+position: relative;
+display: grid;
+grid-template-columns: minmax(0, 1.65fr) minmax(220px, 1fr);
+align-items: stretch;
+overflow: hidden;
+border: 1px solid var(--line, #ffffff24);
+border-radius: 16px;
+background: var(--panel, #15121e);
+color: var(--text, #f5f0ff);
+}
+
+#discover .lookbook-photo {
+position: relative;
+width: 100%;
+min-width: 0;
+min-height: 0;
+aspect-ratio: 16 / 10;
+margin: 0;
+overflow: hidden;
+background: var(--raised, #1d1829);
+}
+
+#discover .lookbook-photo > img {
+position: absolute;
+inset: 0;
+display: block;
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+
+#discover .lookbook-photo figcaption {
+position: absolute;
+inset: auto 0 0;
+padding: 32px 16px 13px;
+background: linear-gradient(transparent, #100b18cc);
+color: white;
+font-size: 13px;
+}
+
+#discover .lookbook-info {
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: flex-start;
+min-width: 0;
+gap: 13px;
+padding: clamp(16px, 2.5vw, 32px);
+}
+
+#discover .lookbook-info h2,
+#discover .lookbook-info p {
+margin: 0;
+}
+
+#discover .lookbook-info h2 {
+font-size: clamp(24px, 3vw, 38px);
+line-height: 1.08;
+}
+
+#discover .lookbook-palette {
+display: flex;
+width: min(180px, 100%);
+height: 22px;
+overflow: hidden;
+border-radius: 5px;
+}
+
+#discover .lookbook-palette > span {
+flex: 1;
+}
+
+/* Keep Remove photo visible over the main photograph */
+
+#discover .lookbook-actions .remove-photo {
+position: absolute;
+top: 12px;
+left: 12px;
+z-index: 2;
+padding: 7px 12px;
+border: 1px solid #ffffff60;
+border-radius: 7px;
+background: #211a2be8;
+color: white;
+cursor: pointer;
+}
+
+/* Smaller photographs stay together beneath the main image */
+
+#discover .lookbook-thumbs {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(min(145px, 100%), 1fr));
+gap: 10px;
+}
+
+#discover .lookbook-thumb {
+display: block;
+min-width: 0;
+padding: 4px;
+overflow: hidden;
+border: 1px solid var(--line, #ffffff24);
+border-radius: 10px;
+background: var(--panel, #15121e);
+color: var(--text, #f5f0ff);
+text-align: left;
+cursor: pointer;
+}
+
+#discover .lookbook-thumb[aria-pressed="true"] {
+border-color: var(--accent, #a98aff);
+}
+
+#discover .lookbook-thumb img {
+display: block;
+width: 100%;
+height: clamp(85px, 9vw, 125px);
+border-radius: 6px;
+object-fit: cover;
+}
+
+#discover .lookbook-thumb span {
+display: block;
+padding: 7px 4px 3px;
+font-size: 12px;
+}
+
+/* On narrow screens, the description moves below the photograph */
+
+@media (max-width: 850px) {
+#discover .lookbook-layout {
+grid-template-columns: minmax(0, 1fr);
+}
+
+#discover .lookbook-photo {
+aspect-ratio: 16 / 9;
+}
+}
+
+.mf-dialog,
+.mf-extra {
+--mf-bg: #30213e;
+--mf-text: #fff8fa;
+--mf-muted: #decedf;
+--mf-line: #705975;
+--mf-accent: #edd1e8;
+font-family: inherit;
+color: var(--mf-text);
+background: var(--mf-bg);
+}
+
+.mf-dialog {
+box-sizing: border-box;
+width: min(410px, calc(100% - 32px));
+max-height: 90dvh;
+margin: auto;
+padding: clamp(20px, 4vw, 30px);
+border: 1px solid var(--mf-line);
+border-radius: 18px;
+box-shadow: 0 18px 80px #170e2566;
+}
+
+.mf-dialog::backdrop {
+background: rgb(22 14 31 / 68%);
+}
+
+.mf-form {
+display: grid;
+gap: 15px;
+}
+
+.mf-form h2,
+.mf-form p,
+.mf-extra h3 {
+margin: 0;
+}
+
+.mf-form p,
+.mf-extra p {
+color: var(--mf-muted);
+line-height: 1.5;
+}
+
+.mf-form label {
+display: grid;
+gap: 6px;
+min-width: 0;
+}
+
+.mf-time-fields {
+display: grid;
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 12px;
+}
+
+.mf-form input:not([type="range"]),
+.mf-form select,
+.mf-form button,
+.mf-extra button {
+box-sizing: border-box;
+min-height: 42px;
+padding: 8px 12px;
+border: 1px solid var(--mf-line);
+border-radius: 9px;
+background: #413149;
+color: var(--mf-text);
+font: inherit;
+}
+
+.mf-form input:not([type="range"]),
+.mf-form select,
+.mf-form input[type="range"] {
+width: 100%;
+}
+
+.mf-form input[type="range"] {
+accent-color: var(--mf-accent);
+}
+
+.mf-form button,
+.mf-extra button {
+cursor: pointer;
+}
+
+.mf-form .mf-primary,
+.mf-extra button[aria-pressed="true"] {
+color: #35233b;
+background: var(--mf-accent);
+}
+
+.mf-form :focus-visible,
+.mf-extra :focus-visible {
+outline: 3px solid #edd1e8;
+outline-offset: 3px;
+}
+
+.mf-actions {
+display: flex;
+flex-wrap: wrap;
+gap: 8px;
+}
+
+#visitError:empty {
+display: none;
+}
+
+#photoPreview {
+width: 100%;
+max-height: 36dvh;
+object-fit: contain;
+display: block;
+background: #211828;
+border-radius: 8px;
+}
+
+.mf-extra {
+margin-top: 20px;
+padding: 20px;
+border: 1px solid var(--mf-line);
+border-radius: 14px;
+}
+
+.mf-game-board {
+display: grid;
+grid-template-columns: repeat(var(--mf-cols, 4), minmax(0, 1fr));
+gap: 8px;
+max-width: 480px;
+}
+
+.mf-game-board button {
+min-width: 0;
+padding-inline: 4px;
+}
+
+.mf-game-board button:disabled {
+opacity: 0.75;
+cursor: default;
+}
+
+/* Keep the saved crop visible even in a fixed-height board row. */
+#moodGrid .mood-card.mf-framed {
+display: grid;
+place-items: center;
+background: transparent;
+}
+
+#moodGrid .mf-framed img {
+width: 100%;
+height: 100%;
+max-width: 100%;
+max-height: 100%;
+object-fit: contain;
+}
+
+
+/* MOODIFY PHOTO FRAMES */
+
+#moodGrid .mood-card.mf-framed {
+position: relative;
+display: grid;
+place-items: center;
+width: 100%;
+overflow: hidden;
+background: var(--panel);
+}
+
+#moodGrid .mood-card.mf-framed img {
+display: block;
+width: 100%;
+height: 100%;
+max-width: 100%;
+max-height: 100%;
+object-fit: contain;
+}
+
+#discover .lookbook-photo > img {
+width: 100%;
+height: 100%;
+object-fit: contain;
+object-position: center;
+}
+
+#discover .lookbook-thumb img {
+width: 100%;
+object-fit: contain;
+object-position: center;
+}
+
+#photoPreview {
+display: block;
+width: 100%;
+max-height: 36dvh;
+object-fit: contain;
+border-radius: 8px;
+background: #211828;
+}
+
+/* SECOND AESTHETIC BOARD */
+
+#studio #mfAesthetic {
+display: block;
+position: relative;
+width: 100%;
+max-width: 100%;
+margin: 35px 0;
+padding: 25px;
+border-radius: 22px;
+background: #f5effa;
+color: #30263b;
+box-sizing: border-box;
+}
+
+#studio #mfAesthetic .mfCards {
+display: grid;
+grid-template-columns: repeat(2, minmax(0, 1fr));
+gap: 18px;
+margin-top: 20px;
+}
+
+#studio #mfAesthetic .mfCard {
+padding: 20px;
+border-radius: 16px;
+background: #ffffff;
+color: #30263b;
+}
+
+#studio #mfAesthetic .mfChoices {
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+gap: 10px;
+}
+
+#studio #mfAesthetic .mfChoice {
+padding: 10px 15px;
+border-radius: 25px;
+cursor: pointer;
+}
+
+#studio #mfAesthetic .mfBanner {
+background: var(
+--mfGradient,
+linear-gradient(135deg, #ad91e4, #e6abc4)
+);
+}
+
+#studio #mfAesthetic [hidden] {
+display: none !important;
+}
+
+@media (max-width: 650px) {
+#studio #mfAesthetic {
+padding: 15px;
+}
+
+#studio #mfAesthetic .mfCards {
+grid-template-columns: 1fr;
+}
+}
+
+
